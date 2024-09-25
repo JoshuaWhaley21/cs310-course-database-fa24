@@ -8,6 +8,8 @@ import java.sql.Statement;
 
 public class RegistrationDAO {
     
+    private final static String QUERY_CREATE = "INSERT INTO registration (studentid, termid, crn) VALUES (?, ?, ?) "; 
+    
     private final DAOFactory daoFactory;
     
     RegistrationDAO(DAOFactory daoFactory) {
@@ -17,9 +19,9 @@ public class RegistrationDAO {
     public boolean create(int studentid, int termid, int crn) {
         
         boolean result = false;
-        
         PreparedStatement ps = null;
         ResultSet rs = null;
+        
         
         try {
             
@@ -28,6 +30,34 @@ public class RegistrationDAO {
             if (conn.isValid(0)) {
                 
                 // INSERT YOUR CODE HERE
+            String QUERY_CHECK = "SELECT COUNT(*) FROM registration WHERE studentid = ? AND termid = ? AND crn = ?";
+            ps = conn.prepareStatement(QUERY_CHECK);
+            ps.setInt(1, studentid);
+            ps.setInt(2, termid);
+            ps.setInt(3, crn);
+            
+            rs = ps.executeQuery();
+            rs.next();
+            int count = rs.getInt(1);
+            
+            // If no duplicate exists, insert the new registration
+            if (count == 0) {
+                ps.close(); // Close previous PreparedStatement
+                
+                ps = conn.prepareStatement(QUERY_CREATE);
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                ps.setInt(3, crn);
+                
+                int rowsAffected = ps.executeUpdate();
+                result = (rowsAffected > 0);
+                
+            } else {
+                // Duplicate found, remove it if required
+                System.out.println("Duplicate registration detected. Removing duplicate...");
+                delete(studentid, termid, crn); // Assuming you have a delete method
+            }
+            
                 
             }
             
@@ -59,6 +89,15 @@ public class RegistrationDAO {
             if (conn.isValid(0)) {
                 
                 // INSERT YOUR CODE HERE
+                String QUERY_DELETE = "DELETE FROM registration WHERE studentid = ? AND termid = ? AND crn = ?";
+                
+                ps = conn.prepareStatement(QUERY_DELETE);
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                ps.setInt(3, crn);
+                
+                int rowsDeleted = ps.executeUpdate();
+                result = (rowsDeleted > 0);
                 
             }
             
@@ -89,6 +128,13 @@ public class RegistrationDAO {
             if (conn.isValid(0)) {
                 
                 // INSERT YOUR CODE HERE
+                String QUERY_DELETE = "DELETE FROM registration WHERE studentid = ? AND termid = ?";
+                ps = conn.prepareStatement(QUERY_DELETE);
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                
+                int rowsDeleted = ps.executeUpdate();
+                result = (rowsDeleted > 0);
                 
             }
             
@@ -121,6 +167,15 @@ public class RegistrationDAO {
             if (conn.isValid(0)) {
                 
                 // INSERT YOUR CODE HERE
+                String QUERY_LIST = "SELECT * FROM registration WHERE studentid = ? AND termid = ?";
+                
+                ps = conn.prepareStatement(QUERY_LIST);
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                
+                rs = ps.executeQuery();
+                
+                
                 
             }
             
