@@ -175,8 +175,10 @@ public class RegistrationDAO {
                 
                 rs = ps.executeQuery();
                 
+                rsmd = rs.getMetaData();
                 
-                
+                result = rsmd.toString();
+   
             }
             
         }

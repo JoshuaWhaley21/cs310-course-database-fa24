@@ -38,7 +38,9 @@ public class SectionDAO {
                 
                 rs = ps.executeQuery();
                 
-                result = DAOUtility.getResultSetAsJson(rs);
+                rsmd = rs.getMetaData();
+
+                result = rsmd.toString();
                 
                 
             }
