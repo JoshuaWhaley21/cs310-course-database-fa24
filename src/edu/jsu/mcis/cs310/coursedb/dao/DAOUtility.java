@@ -16,10 +16,11 @@ public class DAOUtility {
         
             if (rs != null) {
                 
-                // INSERT YOUR CODE HERE
+                // create metadata for storage
                 ResultSetMetaData metadata = rs.getMetaData();
                 int colnum = metadata.getColumnCount();
                 
+                // result set 
                 while(rs.next()){
                     JsonObject JsonResult = new JsonObject();
                     
@@ -27,13 +28,16 @@ public class DAOUtility {
                         String colName = metadata.getColumnLabel(i);
                         Object colContent = rs.getObject(i);
                         
+                        // time to string
                         if (colContent instanceof Time){
                             colContent = colContent.toString();
                         }
                         
+                        // return info as JsonObject
                         JsonResult.put(colName, colContent);
                     }
-                
+                    
+                    // add JsonObject to the array
                     records.add(JsonResult);
                     
                 }

@@ -29,7 +29,7 @@ public class SectionDAO {
             
             if (conn.isValid(0)) {
                 
-                // INSERT YOUR CODE HERE
+                // load in find query
                 ps = conn.prepareStatement(QUERY_FIND);
                 
                 ps.setInt(1, termid);
@@ -38,8 +38,10 @@ public class SectionDAO {
                 
                 rs = ps.executeQuery();
                 
+                // store metadata of find
                 rsmd = rs.getMetaData();
-
+                
+                // return metadata as String
                 result = rsmd.toString();
                 
                 
