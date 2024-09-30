@@ -18,10 +18,9 @@ public class SectionDAO {
     public String find(int termid, String subjectid, String num) {
         
         String result = "[]";
-        
+        ResultSetMetaData rsmd = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        ResultSetMetaData rsmd = null;
         
         try {
             
@@ -30,7 +29,7 @@ public class SectionDAO {
             if (conn.isValid(0)) {
                 
                 // load in find query
-                ps = conn.prepareStatement(QUERY_FIND);
+                ps = conn.prepareStatement(QUERY_FIND, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 
                 ps.setInt(1, termid);
                 ps.setString(2, subjectid);
@@ -38,11 +37,10 @@ public class SectionDAO {
                 
                 rs = ps.executeQuery();
                 
-                // store metadata of find
                 rsmd = rs.getMetaData();
                 
                 // return metadata as String
-                result = rsmd.toString();
+                result = DAOUtility.getResultSetAsJson(rs);
                 
                 
             }

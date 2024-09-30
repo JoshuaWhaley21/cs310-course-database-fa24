@@ -55,10 +55,6 @@ public class RegistrationDAO {
                 int rowsAffected = ps.executeUpdate();
                 result = (rowsAffected > 0);
                 
-            } else {
-                // Duplicate found, remove it if required
-                System.out.println("Duplicate registration detected. Removing duplicate...");
-                delete(studentid, termid, crn); // Assuming you have a delete method
             }
             
                 
@@ -182,11 +178,10 @@ public class RegistrationDAO {
                 
                 rs = ps.executeQuery();
                 
-                // store metadata
-                rsmd = rs.getMetaData();
                 
                 // return metadata as String
-                result = rsmd.toString();
+                result = DAOUtility.getResultSetAsJson(rs);
+                
    
             }
             

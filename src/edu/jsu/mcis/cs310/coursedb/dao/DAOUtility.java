@@ -28,8 +28,13 @@ public class DAOUtility {
                         String colName = metadata.getColumnLabel(i);
                         Object colContent = rs.getObject(i);
                         
-                        // time to string
-                        if (colContent instanceof Time){
+                    // SQL-specific types to String for JSON Conversion
+                        if (colContent instanceof java.sql.Time || colContent instanceof java.sql.Date || colContent instanceof java.sql.Timestamp) {
+                            colContent = colContent.toString();  
+                        }
+
+                        // others to string
+                        if (colContent != null) {
                             colContent = colContent.toString();
                         }
                         
